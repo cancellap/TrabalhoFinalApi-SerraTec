@@ -29,6 +29,10 @@ public class Usuario {
 	private String senha;
 
 	private LocalDate dataNascimento;
+	
+	//Set<Relacionamento> seguidores 
+	
+	//Set<Relacionamento> seguindo 
 
 	public Usuario(Long id, String nome, String sobreNome, String email, String senha, LocalDate dataNascimento) {
 		super();

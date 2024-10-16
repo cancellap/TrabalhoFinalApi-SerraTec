@@ -15,12 +15,22 @@ public class Comentario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private Long idUsuario;
+
 	private String texto;
 
 	private LocalDate dataCriacao;
 
 	public Long getId() {
 		return id;
+	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public void setId(Long id) {

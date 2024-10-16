@@ -1,8 +1,9 @@
 package com.serratec.redeSocial.domain;
 
-
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +21,8 @@ public class Postagem {
 
 	private LocalDate dataCriacao;
 
+	private Set<Comentario> comentarios = new HashSet<>();
+
 	public Postagem(Long id, String conteudo, LocalDate dataCriacao) {
 		super();
 		this.id = id;
@@ -29,6 +32,14 @@ public class Postagem {
 
 	public Postagem() {
 		super();
+	}
+
+	public Set<Comentario> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(Set<Comentario> comentarios) {
+		this.comentarios = comentarios;
 	}
 
 	public Long getId() {
