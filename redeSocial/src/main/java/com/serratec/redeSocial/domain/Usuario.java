@@ -1,13 +1,10 @@
 package com.serratec.redeSocial.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Usuario {
@@ -20,7 +17,7 @@ public class Usuario {
 	private String nome;
 
 	@Column(name="sobrenome_usuario")
-	private String sobreNome;
+	private String sobrenome;
 
 	@Column(name="email_usuario")
 	private String email;
@@ -28,17 +25,22 @@ public class Usuario {
 	@Column(name="senha_usuario")
 	private String senha;
 
+	@Column
 	private LocalDate dataNascimento;
 	
 	//Set<Relacionamento> seguidores 
 	
-	//Set<Relacionamento> seguindo 
+	//Set<Relacionamento> seguindo
 
-	public Usuario(Long id, String nome, String sobreNome, String email, String senha, LocalDate dataNascimento) {
+	//Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	private List<Postagem> postagens;
+
+	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.sobreNome = sobreNome;
+		this.sobrenome = sobrenome;
 		this.email = email;
 		this.senha = senha;
 		this.dataNascimento = dataNascimento;
@@ -64,12 +66,12 @@ public class Usuario {
 		this.nome = nome;
 	}
 
-	public String getSobreNome() {
-		return sobreNome;
+	public String getSobrenome() {
+		return sobrenome;
 	}
 
-	public void setSobreNome(String sobreNome) {
-		this.sobreNome = sobreNome;
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 
 	public String getEmail() {
@@ -94,6 +96,14 @@ public class Usuario {
 
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	public List<Postagem> getPostagens() {
+		return postagens;
+	}
+
+	public void setPostagens(List<Postagem> postagens) {
+		this.postagens = postagens;
 	}
 
 	@Override

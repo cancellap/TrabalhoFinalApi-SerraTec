@@ -3,10 +3,7 @@ package com.serratec.redeSocial.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Comentario {
@@ -20,6 +17,10 @@ public class Comentario {
 	private String texto;
 
 	private LocalDate dataCriacao;
+
+	@ManyToOne //Muitos comentários para uma postagem
+	@JoinColumn(name = "postagem_id")
+	private Postagem postagem;
 
 	public Long getId() {
 		return id;
@@ -51,6 +52,14 @@ public class Comentario {
 
 	public void setDataCriacao(LocalDate dataCriacao) {
 		this.dataCriacao = dataCriacao;
+	}
+
+	public Postagem getPostagem() {
+		return postagem;
+	}
+
+	public void setPostagem(Postagem postagem) {
+		this.postagem = postagem;
 	}
 
 	@Override
