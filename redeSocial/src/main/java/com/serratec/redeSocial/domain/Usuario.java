@@ -28,10 +28,6 @@ public class Usuario {
 	@Column
 	private LocalDate dataNascimento;
 
-	@ManyToOne
-	@JoinColumn(name = "id_usuario")
-	private Usuario usuario;
-
 	// Set<Relacionamento> seguidores
 
 	// Set<Relacionamento> seguindo
@@ -109,14 +105,6 @@ public class Usuario {
 
 	public void setPostagens(List<Postagem> postagens) {
 		this.postagens = postagens;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	@Override

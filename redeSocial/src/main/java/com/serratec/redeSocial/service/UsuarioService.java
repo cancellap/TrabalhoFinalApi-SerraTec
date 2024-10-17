@@ -35,7 +35,7 @@ public class UsuarioService {
 
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
-		usuario.setSobreNome(usuarioInserirDTO.getSobreNome());
+		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
 		usuario.setSenha((usuarioInserirDTO.getSenha()));
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());

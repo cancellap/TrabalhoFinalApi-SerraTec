@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class UsuarioInserirDTO {
 
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
 	private String email;
 	private String senha;
 	private String confirmaSenha;
@@ -19,12 +19,12 @@ public class UsuarioInserirDTO {
 		this.nome = nome;
 	}
 
-	public String getSobreNome() {
-		return sobreNome;
+	public String getSobrenome() {
+		return sobrenome;
 	}
 
-	public void setSobreNome(String sobreNome) {
-		this.sobreNome = sobreNome;
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 
 	public String getEmail() {
