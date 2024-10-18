@@ -29,7 +29,8 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	@Autowired UsuarioService usuarioService;
+	@Autowired 
+	private UsuarioService usuarioService;
 	
 	@GetMapping
 	public ResponseEntity<List<UsuarioDTO>> listar(){

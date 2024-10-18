@@ -10,6 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import jakarta.persistence.*;
+
+
 @Entity
 public class Comentario {
 
@@ -23,7 +26,7 @@ public class Comentario {
 
 	private LocalDate dataCriacao;
 
-	@ManyToOne // Muitos comentários para uma postagem
+	@ManyToOne //Muitos comentários para uma postagem
 	@JoinColumn(name = "postagem_id")
 	private Postagem postagem;
 
