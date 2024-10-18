@@ -19,12 +19,28 @@ import com.serratec.redeSocial.service.PostagemService;
 @RestController
 @RequestMapping("/post")
 public class PostagemController {
-	
-    @Autowired
-    private PostagemService postagemService;
 
-    @GetMapping
-    public ResponseEntity<List<Postagem>> listar(){
-    	return ResponseEntity.ok(postagemService.getPostagens);
-    }
+	@Autowired
+	private PostagemService postagemService;
+
+	@GetMapping
+	public ResponseEntity<List<Postagem>> listar() {
+		return ResponseEntity.ok(postagemService.listar());
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Postagem> buscar() {
+		return ResponseEntity.ok(postagemService.buscarPorId(1L));
+	}
+
+	@PostMapping
+	public ResponseEntity<Postagem> salvar(@RequestBody Postagem postagem) {
+		return new ResponseEntity<>(postagemService.salvar(postagem), HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletar(@PathVariable Long id) {
+		postagemService.deletarById(id);
+		return ResponseEntity.noContent().build();
+	}
 }
