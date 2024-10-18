@@ -9,6 +9,10 @@ public class Relacionamento{
 //	
 //	private Long idSec;
 
+	private Usuario seguindo;
+
+	private Usuario seguidor;
+
 	private LocalDate dataDeInicio;
 	
 }
