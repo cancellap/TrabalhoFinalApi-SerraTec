@@ -2,12 +2,14 @@ package com.serratec.redeSocial.domain;
 
 import java.time.LocalDate;
 import java.util.Objects;
-
+import java.util.Set;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -30,9 +32,13 @@ public class Usuario {
 
 	private LocalDate dataNascimento;
 	
-	//Set<Relacionamento> seguidores 
+	@OneToMany(mappedBy = "seguidor", cascade = CascadeType.ALL)
+	private Set<Relacionamento> seguidor;
+
+	@OneToMany(mappedBy = "seguido", cascade = CascadeType.ALL)
+	private Set<Relacionamento> seguido;
 	
-	//Set<Relacionamento> seguindo 
+	
 
 	public Usuario(Long id, String nome, String sobreNome, String email, String senha, LocalDate dataNascimento) {
 		super();
@@ -96,9 +102,25 @@ public class Usuario {
 		this.dataNascimento = dataNascimento;
 	}
 
+	public Set<Relacionamento> getSeguidor() {
+		return seguidor;
+	}
+
+	public void setSeguidor(Set<Relacionamento> seguidor) {
+		this.seguidor = seguidor;
+	}
+
+	public Set<Relacionamento> getSeguido() {
+		return seguido;
+	}
+
+	public void setSeguido(Set<Relacionamento> seguido) {
+		this.seguido = seguido;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(dataNascimento, email, id, nome, seguido, seguidor, senha, sobreNome);
 	}
 
 	@Override
@@ -110,7 +132,12 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(dataNascimento, other.dataNascimento) && Objects.equals(email, other.email)
+				&& Objects.equals(id, other.id) && Objects.equals(nome, other.nome)
+				&& Objects.equals(seguido, other.seguido) && Objects.equals(seguidor, other.seguidor)
+				&& Objects.equals(senha, other.senha) && Objects.equals(sobreNome, other.sobreNome);
 	}
+
+	
 
 }
