@@ -13,26 +13,27 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name="nome_usuario")
+	@Column(name = "nome_usuario")
 	private String nome;
 
-	@Column(name="sobrenome_usuario")
+	@Column(name = "sobrenome_usuario")
 	private String sobrenome;
 
-	@Column(name="email_usuario")
+	@Column(name = "email_usuario")
 	private String email;
 
-	@Column(name="senha_usuario")
+	@Column(name = "senha_usuario")
 	private String senha;
 
 	@Column
 	private LocalDate dataNascimento;
-	
-	//Set<Relacionamento> seguidores 
-	
-	//Set<Relacionamento> seguindo
 
-	//Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	// Set<Relacionamento> seguidores
+
+	// Set<Relacionamento> seguindo
+
+	// Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das
+	// anotações JsonBackReference e IgnoreJson
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<Postagem> postagens;
 
