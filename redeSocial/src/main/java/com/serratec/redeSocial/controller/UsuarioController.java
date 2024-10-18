@@ -37,10 +37,11 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> buscar(@PathVariable Long id){
+	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id){
 		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
 		if(usuarioOpt.isPresent()) {
-			return ResponseEntity.ok(usuarioOpt.get());
+			UsuarioDTO usuarioDTO = new UsuarioDTO(usuarioOpt.get());
+			return ResponseEntity.ok(usuarioDTO);
 		}
 		return ResponseEntity.notFound().build();
 	}
