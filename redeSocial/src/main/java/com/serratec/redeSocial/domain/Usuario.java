@@ -3,7 +3,6 @@ package com.serratec.redeSocial.domain;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -29,9 +28,9 @@ public class Usuario {
 	@Column
 	private LocalDate dataNascimento;
 	
-	private Set<Relacionamento> seguidores;
-
-	private Set<Relacionamento> seguindo;
+	//Set<Relacionamento> seguidores 
+	
+	//Set<Relacionamento> seguindo
 
 	//Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
