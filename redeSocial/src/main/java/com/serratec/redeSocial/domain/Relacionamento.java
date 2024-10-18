@@ -2,13 +2,13 @@ package com.serratec.redeSocial.domain;
 
 import java.time.LocalDate;
 
-public class Relacionamento{
+public class Relacionamento {
 
-//	atribudos vindos do RelacionamentoPK (EmbededId)
-//	private Long idPric;
+//	atribudos vindos do RelacionamentoPK atraves do EmbededId
 //	
-//	private Long idSec;
+//	notacoes para join no banco de dados	
+//	
 
 	private LocalDate dataDeInicio;
-	
+
 }

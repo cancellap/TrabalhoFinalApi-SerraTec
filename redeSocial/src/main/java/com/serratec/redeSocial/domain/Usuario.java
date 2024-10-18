@@ -28,9 +28,12 @@ public class Usuario {
 	@Column
 	private LocalDate dataNascimento;
 	
+	
 	//Set<Relacionamento> seguidores 
 	
+	
 	//Set<Relacionamento> seguindo
+	
 
 	//Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
