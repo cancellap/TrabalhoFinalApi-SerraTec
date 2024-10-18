@@ -5,10 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Postagem {
@@ -21,7 +18,14 @@ public class Postagem {
 
 	private LocalDate dataCriacao;
 
+	//Uma postagem para
+	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)
 	private Set<Comentario> comentarios = new HashSet<>();
+
+	//Relação de muitos para um postagem e usuário. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	@ManyToOne
+	@JoinColumn(name = "usuario_id")
+	private Usuario usuario;
 
 	public Postagem(Long id, String conteudo, LocalDate dataCriacao) {
 		super();
@@ -38,6 +42,7 @@ public class Postagem {
 		return comentarios;
 	}
 
+	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)
 	public void setComentarios(Set<Comentario> comentarios) {
 		this.comentarios = comentarios;
 	}
@@ -64,6 +69,14 @@ public class Postagem {
 
 	public void setDataCriacao(LocalDate dataCriacao) {
 		this.dataCriacao = dataCriacao;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override
