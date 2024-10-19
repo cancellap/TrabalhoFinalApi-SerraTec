@@ -11,6 +11,7 @@ public class UsuarioInserirDTO {
 	private String confirmaSenha;
 	private LocalDate dataNascimento;
 
+	
 	public String getNome() {
 		return nome;
 	}
