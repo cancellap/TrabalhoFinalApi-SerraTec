@@ -48,6 +48,27 @@ public class Usuario {
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<Postagem> postagens;
 
+	public Usuario(Long id, @NotBlank(message = "Nome do usuario deve ser preenchido") String nome,
+			@NotBlank(message = "Sobrenome do usuario deve ser preenchido") String sobrenome,
+			@NotBlank(message = "E-mail do usuario deve ser preenchido") String email,
+			@NotBlank(message = "Senha do usuario deve ser preenchida") String senha, LocalDate dataNascimento,
+			Set<Relacionamento> seguidor, Set<Relacionamento> seguido, List<Postagem> postagens) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.email = email;
+		this.senha = senha;
+		this.dataNascimento = dataNascimento;
+		this.seguidor = seguidor;
+		this.seguido = seguido;
+		this.postagens = postagens;
+	}
+
+	public Usuario() {
+		super();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -118,27 +139,6 @@ public class Usuario {
 
 	public void setPostagens(List<Postagem> postagens) {
 		this.postagens = postagens;
-	}
-
-	public Usuario(Long id, @NotBlank(message = "Nome do usuario deve ser preenchido") String nome,
-			@NotBlank(message = "Sobrenome do usuario deve ser preenchido") String sobrenome,
-			@NotBlank(message = "E-mail do usuario deve ser preenchido") String email,
-			@NotBlank(message = "Senha do usuario deve ser preenchida") String senha, LocalDate dataNascimento,
-			Set<Relacionamento> seguidor, Set<Relacionamento> seguido, List<Postagem> postagens) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.email = email;
-		this.senha = senha;
-		this.dataNascimento = dataNascimento;
-		this.seguidor = seguidor;
-		this.seguido = seguido;
-		this.postagens = postagens;
-	}
-
-	public Usuario() {
-		super();
 	}
 
 }

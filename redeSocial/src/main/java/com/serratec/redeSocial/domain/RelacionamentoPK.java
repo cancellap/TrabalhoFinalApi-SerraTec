@@ -1,50 +1,43 @@
 package com.serratec.redeSocial.domain;
 
-
-import java.util.Objects;
+import java.io.Serializable;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Embeddable
-public class RelacionamentoPK {
+public class RelacionamentoPK implements Serializable {
 
-	private Usuario idPrincipal;
+	private static final long serialVersionUID = 1L;
 	
-	private Usuario idSecundario;
+	@ManyToOne
+	@JoinColumn(name = "id_principal")
+	private Long idPrincipal;
 
-	public Usuario getIdPrincipal() {
+	@ManyToOne
+	@JoinColumn(name = "id_secundario")
+	private Long IdSecundario;
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Long getIdPrincipal() {
 		return idPrincipal;
 	}
 
-	public void setIdPrincipal(Usuario idPrincipal) {
+	public void setIdPrincipal(Long idPrincipal) {
 		this.idPrincipal = idPrincipal;
 	}
 
-	public Usuario getIdSecundario() {
-		return idSecundario;
+	public Long getIdSecundario() {
+		return IdSecundario;
 	}
 
-	public void setIdSecundario(Usuario idSecundario) {
-		this.idSecundario = idSecundario;
+	public void setIdSecundario(Long idSecundario) {
+		IdSecundario = idSecundario;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(idPrincipal, idSecundario);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RelacionamentoPK other = (RelacionamentoPK) obj;
-		return Objects.equals(idPrincipal, other.idPrincipal) && Objects.equals(idSecundario, other.idSecundario);
-	}
 	
-	
-
 }
