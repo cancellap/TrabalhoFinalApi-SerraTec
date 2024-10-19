@@ -4,7 +4,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import java.util.Set;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -13,29 +20,31 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name="nome_usuario")
+	@Column(name = "nome_usuario")
 	private String nome;
 
-	@Column(name="sobrenome_usuario")
+	@Column(name = "sobrenome_usuario")
 	private String sobrenome;
 
-	@Column(name="email_usuario")
+	@Column(name = "email_usuario")
 	private String email;
 
-	@Column(name="senha_usuario")
+	@Column(name = "senha_usuario")
 	private String senha;
 
 	@Column
 	private LocalDate dataNascimento;
-	
-	
-	//Set<Relacionamento> seguidores 
-	
-	
-	//Set<Relacionamento> seguindo
-	
 
-	//Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	// Set<Relacionamento> seguidores
+
+	// Set<Relacionamento> seguindo
+
+	@OneToMany(mappedBy = "seguidor", cascade = CascadeType.ALL)
+	private Set<Relacionamento> seguidor;
+
+	@OneToMany(mappedBy = "seguido", cascade = CascadeType.ALL)
+	private Set<Relacionamento> seguido;
+
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<Postagem> postagens;
 
@@ -109,9 +118,25 @@ public class Usuario {
 		this.postagens = postagens;
 	}
 
+	public Set<Relacionamento> getSeguidor() {
+		return seguidor;
+	}
+
+	public void setSeguidor(Set<Relacionamento> seguidor) {
+		this.seguidor = seguidor;
+	}
+
+	public Set<Relacionamento> getSeguido() {
+		return seguido;
+	}
+
+	public void setSeguido(Set<Relacionamento> seguido) {
+		this.seguido = seguido;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(dataNascimento, email, id, nome, seguido, seguidor, senha, sobrenome);
 	}
 
 	@Override
@@ -123,7 +148,10 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(dataNascimento, other.dataNascimento) && Objects.equals(email, other.email)
+				&& Objects.equals(id, other.id) && Objects.equals(nome, other.nome)
+				&& Objects.equals(seguido, other.seguido) && Objects.equals(seguidor, other.seguidor)
+				&& Objects.equals(senha, other.senha) && Objects.equals(sobrenome, other.sobrenome);
 	}
 
 }
