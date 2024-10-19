@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.serratec.redeSocial.domain.Usuario;
 import com.serratec.redeSocial.dto.UsuarioDTO;
 import com.serratec.redeSocial.dto.UsuarioInserirDTO;
+import com.serratec.redeSocial.exception.EmailException;
+import com.serratec.redeSocial.exception.SenhaException;
 import com.serratec.redeSocial.repository.UsuarioRepository;
 
 @Service
@@ -33,6 +35,12 @@ public class UsuarioService {
 	@Transactional
 	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
 
+		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
+			throw new SenhaException("Senhas não coincidem.");
+		}
+		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
+			throw new EmailException("Email já existente.");
+		}
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
