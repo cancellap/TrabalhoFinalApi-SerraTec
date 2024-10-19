@@ -13,8 +13,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -38,13 +41,15 @@ public class ConfigSeguranca {
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .anyRequest().permitAll()
+//                                .requestMatchers("/h2-console/**").permitAll()
+                                .anyRequest().authenticated()
 //                                .requestMatchers(HttpMethod.GET, "/funcionarios").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/enderecos/**").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/usuarios/{id}").hasAuthority("ADMIN")
 //                                .requestMatchers(HttpMethod.GET, "/funcionarios/nome").hasAnyAuthority("ADMIN", "USER")
 //                                .anyRequest().authenticated()
+
                 )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -57,6 +62,7 @@ public class ConfigSeguranca {
         JwtAuthorizationFilter jwtAuthorizationFilter =
                 new JwtAuthorizationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
                         jwtUtil, userDetailsService);
+
 
         http.addFilter(jwtAuthenticationFilter);
         http.addFilter(jwtAuthorizationFilter);
@@ -76,15 +82,16 @@ public class ConfigSeguranca {
         return source;
     }
 
-    @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

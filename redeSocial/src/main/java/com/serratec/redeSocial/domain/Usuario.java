@@ -1,10 +1,9 @@
 package com.serratec.redeSocial.domain;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-
-import java.util.Set;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -16,9 +15,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails, Serializable {
+
+	@Serial
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -144,4 +149,20 @@ public class Usuario {
 		this.postagens = postagens;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("ADMIN"));
+		return authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		return senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
 }

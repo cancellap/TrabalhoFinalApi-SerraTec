@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,42 +18,45 @@ import com.serratec.redeSocial.repository.UsuarioRepository;
 @Service
 public class UsuarioService {
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-	public List<UsuarioDTO> findAll() {
-		List<Usuario> usuarios = usuarioRepository.findAll();
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
-		List<UsuarioDTO> usuariosDTO = usuarios.stream().map(UsuarioDTO::new).toList();
+    public List<UsuarioDTO> findAll() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
 
-		return usuariosDTO;
-	}
+        List<UsuarioDTO> usuariosDTO = usuarios.stream().map(UsuarioDTO::new).toList();
 
-	public Optional<Usuario> buscar(Long id) {
-		return usuarioRepository.findById(id);
-	}
+        return usuariosDTO;
+    }
 
-	@Transactional
-	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
+    public Optional<Usuario> buscar(Long id) {
+        return usuarioRepository.findById(id);
+    }
 
-		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
-			throw new SenhaException("Senhas não coincidem.");
-		}
-		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
-			throw new EmailException("Email já existente.");
-		}
+    @Transactional
+    public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
 
-		Usuario usuario = new Usuario();
-		usuario.setNome(usuarioInserirDTO.getNome());
-		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
-		usuario.setEmail(usuarioInserirDTO.getEmail());
-		usuario.setSenha(usuarioInserirDTO.getSenha());
-		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+        if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
+            throw new SenhaException("Senhas não coincidem.");
+        }
+        if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
+            throw new EmailException("Email já existente.");
+        }
 
-		usuario = usuarioRepository.save(usuario);
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioInserirDTO.getNome());
+        usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
+        usuario.setEmail(usuarioInserirDTO.getEmail());
+        usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+        usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 
-		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-		return usuarioDTO;
-	}
+        usuario = usuarioRepository.save(usuario);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        return usuarioDTO;
+    }
 
 }

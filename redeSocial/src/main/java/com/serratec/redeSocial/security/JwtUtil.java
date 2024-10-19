@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtUtil {
 
 
-    private String jwtSecret = "algumachavesecretamtdoida";
+    private String jwtSecret = "wOXx9za7W4cPn1J3Cu7ORa2nuw5Wm5bM";
 
 
     private Long jwtExpirationMiliseg = 900000L;
