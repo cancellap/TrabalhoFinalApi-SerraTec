@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,11 +22,11 @@ public class Postagem {
 
 	private LocalDate dataCriacao;
 
-	//Uma postagem para
 	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)
 	private Set<Comentario> comentarios = new HashSet<>();
 
 	//Relação de muitos para um postagem e usuário. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;

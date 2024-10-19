@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,16 +22,27 @@ import com.serratec.redeSocial.exception.SenhaException;
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
+	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
 		List<String> erros = new ArrayList<>();
-		for (FieldError e : ex.getBindingResult().getFieldErrors()) {
-			erros.add(e.getField() + " -> " + e.getDefaultMessage());
+		for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+			erros.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
 		}
-		ErroResposta erroResposta = new ErroResposta(status.value(), "Existem campos invalidos", LocalDateTime.now(),
+
+		ErroResposta erroResposta = new ErroResposta(status.value(), "Existem campos inválidos", LocalDateTime.now(),
 				erros);
-		return super.handleExceptionInternal(ex, erroResposta, headers, status, request);
+		return ResponseEntity.status(status).body(erroResposta);
+	}
+
+	// trata a execao lancado dentro do Combustivel
+	// sobrescrevendo o método handleHttpMessageNotReadable da classe
+	// ResponseEntityExceptionHandler
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+	        HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+	    return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 
 	@ExceptionHandler(EmailException.class)

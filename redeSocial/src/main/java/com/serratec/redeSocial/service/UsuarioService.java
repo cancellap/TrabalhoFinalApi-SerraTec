@@ -35,17 +35,18 @@ public class UsuarioService {
 	@Transactional
 	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
 
-		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
+		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
 			throw new SenhaException("Senhas não coincidem.");
 		}
 		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
 			throw new EmailException("Email já existente.");
 		}
+
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
-		usuario.setSenha((usuarioInserirDTO.getSenha()));
+		usuario.setSenha(usuarioInserirDTO.getSenha());
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 
 		usuario = usuarioRepository.save(usuario);
