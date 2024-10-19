@@ -23,7 +23,7 @@ public class Usuario {
 	@NotBlank(message = "Nome do usuario deve ser preenchido")
 	@Column(name = "nome_usuario", nullable = false)
 	private String nome;
-
+//
 	@NotBlank(message = "Sobrenome do usuario deve ser preenchido")
 	@Column(name = "sobrenome_usuario", nullable = false)
 	private String sobrenome;
