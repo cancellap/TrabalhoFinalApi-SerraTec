@@ -1,42 +1,61 @@
 package com.serratec.redeSocial.domain;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
-import jakarta.persistence.*;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "usuario_id")
 	private Long id;
 
-	@Column(name="nome_usuario")
+	@Column(name = "nome_usuario", nullable = false)
 	private String nome;
 
-	@Column(name="sobrenome_usuario")
+	@Column(name = "sobrenome_usuario", nullable = false)
 	private String sobrenome;
 
-	@Column(name="email_usuario")
+	@Column(name = "email_usuario", nullable = false)
 	private String email;
 
-	@Column(name="senha_usuario")
+	@Column(name = "senha_usuario", nullable = false)
 	private String senha;
 
 	@Column
 	private LocalDate dataNascimento;
-	
-	//Set<Relacionamento> seguidores 
-	
-	//Set<Relacionamento> seguindo
 
-	//Relação um para muitos entre Usuário e postagem. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	@OneToMany(mappedBy = "relacionamentoPK.seguidor", cascade = CascadeType.ALL)
+	private Set<Relacionamento> relacionamentoSeguidores = new HashSet<>();
+
+	@OneToMany(mappedBy = "relacionamentoPK.seguido", cascade = CascadeType.ALL)
+	private Set<Relacionamento> relacionamentoSeguindo = new HashSet<>();
+
+	@JsonManagedReference
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<Postagem> postagens;
 
-	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento) {
+	public Usuario(Long id, @NotBlank(message = "Nome do usuario deve ser preenchido") String nome,
+			@NotBlank(message = "Sobrenome do usuario deve ser preenchido") String sobrenome,
+			@NotBlank(message = "E-mail do usuario deve ser preenchido") String email,
+			@NotBlank(message = "Senha do usuario deve ser preenchida") String senha, LocalDate dataNascimento,
+			Set<Relacionamento> relacionamentoSeguidores, Set<Relacionamento> relacionamentoSeguindo,
+			List<Postagem> postagens) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -44,6 +63,9 @@ public class Usuario {
 		this.email = email;
 		this.senha = senha;
 		this.dataNascimento = dataNascimento;
+		this.relacionamentoSeguidores = relacionamentoSeguidores;
+		this.relacionamentoSeguindo = relacionamentoSeguindo;
+		this.postagens = postagens;
 	}
 
 	public Usuario() {
@@ -98,29 +120,28 @@ public class Usuario {
 		this.dataNascimento = dataNascimento;
 	}
 
+	public Set<Relacionamento> getRelacionamentoSeguidores() {
+		return relacionamentoSeguidores;
+	}
+
+	public void setRelacionamentoSeguidores(Set<Relacionamento> relacionamentoSeguidores) {
+		this.relacionamentoSeguidores = relacionamentoSeguidores;
+	}
+
+	public Set<Relacionamento> getRelacionamentoSeguindo() {
+		return relacionamentoSeguindo;
+	}
+
+	public void setRelacionamentoSeguindo(Set<Relacionamento> relacionamentoSeguindo) {
+		this.relacionamentoSeguindo = relacionamentoSeguindo;
+	}
+
 	public List<Postagem> getPostagens() {
 		return postagens;
 	}
 
 	public void setPostagens(List<Postagem> postagens) {
 		this.postagens = postagens;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Usuario other = (Usuario) obj;
-		return Objects.equals(id, other.id);
 	}
 
 }
