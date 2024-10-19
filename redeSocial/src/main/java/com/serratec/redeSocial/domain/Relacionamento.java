@@ -1,9 +1,7 @@
 package com.serratec.redeSocial.domain;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -16,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Relacionamento {
 
-	private LocalDate dataDeInicio1;
+	private LocalDate dataDeInicio;
 	@EmbeddedId
 	private RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
 
@@ -28,8 +26,13 @@ public class Relacionamento {
 	@JoinColumn(name = "id_secundario")
 	private Long IdSecundario;
 
-	@Column
-	private LocalDate dataDeInicio;
+	public RelacionamentoPK getRelacionamentoPK() {
+		return relacionamentoPK;
+	}
+
+	public void setRelacionamentoPK(RelacionamentoPK relacionamentoPK) {
+		this.relacionamentoPK = relacionamentoPK;
+	}
 
 	public Long getIdPrincipal() {
 		return idPrincipal;
@@ -48,29 +51,11 @@ public class Relacionamento {
 	}
 
 	public LocalDate getDataDeInicio() {
-		return dataDeInicio1;
+		return dataDeInicio;
 	}
 
 	public void setDataDeInicio(LocalDate dataDeInicio) {
-		this.dataDeInicio1 = dataDeInicio;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(IdSecundario, dataDeInicio1, idPrincipal);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Relacionamento other = (Relacionamento) obj;
-		return Objects.equals(IdSecundario, other.IdSecundario) && Objects.equals(dataDeInicio1, other.dataDeInicio1)
-				&& Objects.equals(idPrincipal, other.idPrincipal);
+		this.dataDeInicio = dataDeInicio;
 	}
 
 }
