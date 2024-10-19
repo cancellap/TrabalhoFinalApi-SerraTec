@@ -10,14 +10,14 @@ import jakarta.persistence.ManyToOne;
 
 
 public class Relacionamento{
-	
+
 	@EmbeddedId
 	private RelacionamentoPK relacionamentoPK = new RelacionamentoPK ();
-	 
+
 	@ManyToOne
 	@JoinColumn(name = "id_principal")
 	private Long idPrincipal;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_secundario")
 	private Long IdSecundario;
@@ -67,8 +67,8 @@ public class Relacionamento{
 				&& Objects.equals(idPrincipal, other.idPrincipal);
 	}
 
-	
 
-	
-	
+
+
+
 }
