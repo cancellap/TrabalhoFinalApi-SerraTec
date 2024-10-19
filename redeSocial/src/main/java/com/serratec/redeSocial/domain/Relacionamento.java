@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 //	atribudos vindos do RelacionamentoPK atraves do EmbededId
@@ -12,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 //	notacoes para join no banco de dados	
 //	
 
-
+@Entity
 public class Relacionamento {
 
 	private LocalDate dataDeInicio1;

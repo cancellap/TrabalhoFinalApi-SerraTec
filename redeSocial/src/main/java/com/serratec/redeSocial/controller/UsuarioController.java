@@ -22,6 +22,8 @@ import com.serratec.redeSocial.dto.UsuarioInserirDTO;
 import com.serratec.redeSocial.repository.UsuarioRepository;
 import com.serratec.redeSocial.service.UsuarioService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -38,16 +40,17 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> buscar(@PathVariable Long id){
+	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id){
 		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
 		if(usuarioOpt.isPresent()) {
-			return ResponseEntity.ok(usuarioOpt.get());
+			UsuarioDTO usuarioDTO = new UsuarioDTO(usuarioOpt.get());
+			return ResponseEntity.ok(usuarioDTO);
 		}
 		return ResponseEntity.notFound().build();
 	}
 	
 	@PostMapping
-	public ResponseEntity<UsuarioDTO> inserir(@RequestBody UsuarioInserirDTO usuarioInserirDTO){
+	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO){
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()

@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Usuario {
@@ -20,24 +21,24 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "nome_usuario")
+	@NotBlank(message = "Nome do usuario deve ser preenchido")
+	@Column(name = "nome_usuario",nullable = false)
 	private String nome;
 
-	@Column(name = "sobrenome_usuario")
+	@NotBlank(message = "Sobrenome do usuario deve ser preenchido")
+	@Column(name = "sobrenome_usuario", nullable = false)
 	private String sobrenome;
 
-	@Column(name = "email_usuario")
+	@NotBlank(message = "E-mail do usuario deve ser preenchido")
+	@Column(name = "email_usuario",nullable = false)
 	private String email;
 
-	@Column(name = "senha_usuario")
+	@NotBlank(message = "Senha do usuario deve ser preenchida")
+	@Column(name = "senha_usuario",nullable = false)
 	private String senha;
 
 	@Column
 	private LocalDate dataNascimento;
-
-	// Set<Relacionamento> seguidores
-
-	// Set<Relacionamento> seguindo
 
 	@OneToMany(mappedBy = "seguidor", cascade = CascadeType.ALL)
 	private Set<Relacionamento> seguidor;

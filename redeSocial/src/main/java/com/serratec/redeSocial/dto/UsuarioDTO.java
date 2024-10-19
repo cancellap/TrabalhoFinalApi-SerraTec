@@ -11,11 +11,12 @@ public class UsuarioDTO {
 	private String sobreNome;
 	private String email;
 	private LocalDate dataNascimento;
-	
-	public UsuarioDTO() {}
-	
+
+	public UsuarioDTO() {
+	}
+
 	public UsuarioDTO(Usuario usuario) {
-		
+
 	}
 
 	public Long getId() {
@@ -57,6 +58,5 @@ public class UsuarioDTO {
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-	
-	
+
 }
