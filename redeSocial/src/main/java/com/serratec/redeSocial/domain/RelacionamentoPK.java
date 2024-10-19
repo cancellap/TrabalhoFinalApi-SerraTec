@@ -10,34 +10,33 @@ import jakarta.persistence.ManyToOne;
 public class RelacionamentoPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_principal")
-	private Long idPrincipal;
+	private Usuario seguidor;
 
 	@ManyToOne
 	@JoinColumn(name = "id_secundario")
-	private Long IdSecundario;
+	private Usuario seguido;
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public Long getIdPrincipal() {
-		return idPrincipal;
+	public Usuario getSeguidor() {
+		return seguidor;
 	}
 
-	public void setIdPrincipal(Long idPrincipal) {
-		this.idPrincipal = idPrincipal;
+	public void setSeguidor(Usuario seguidor) {
+		this.seguidor = seguidor;
 	}
 
-	public Long getIdSecundario() {
-		return IdSecundario;
+	public Usuario getSeguido() {
+		return seguido;
 	}
 
-	public void setIdSecundario(Long idSecundario) {
-		IdSecundario = idSecundario;
+	public void setSeguido(Usuario seguido) {
+		this.seguido = seguido;
 	}
 
-	
 }
