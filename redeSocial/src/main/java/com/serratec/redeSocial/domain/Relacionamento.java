@@ -16,10 +16,10 @@ import jakarta.persistence.Id;
 @Entity
 public class Relacionamento {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Long id;
+//	
 	@EmbeddedId
 	private RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
 
@@ -29,6 +29,7 @@ public class Relacionamento {
 		return relacionamentoPK;
 	}
 
+	
 	public void setRelacionamentoPK(RelacionamentoPK relacionamentoPK) {
 		this.relacionamentoPK = relacionamentoPK;
 	}
