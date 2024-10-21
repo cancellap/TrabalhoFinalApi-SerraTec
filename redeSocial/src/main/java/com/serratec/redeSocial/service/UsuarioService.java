@@ -38,7 +38,7 @@ public class UsuarioService {
 		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
 			throw new SenhaException("Senhas não coincidem.");
 		}
-		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
+		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()).isPresent()) {
 			throw new EmailException("Email já existente.");
 		}
 

@@ -36,8 +36,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(status).body(erroResposta);
 	}
 
-	// trata a execao lancado dentro do Combustivel
-	// sobrescrevendo o método handleHttpMessageNotReadable da classe
 	// ResponseEntityExceptionHandler
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,

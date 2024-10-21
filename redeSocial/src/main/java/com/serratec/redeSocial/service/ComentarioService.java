@@ -1,9 +1,14 @@
 package com.serratec.redeSocial.service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.serratec.redeSocial.domain.Comentario;
 import com.serratec.redeSocial.domain.Postagem;
+import com.serratec.redeSocial.domain.Relacionamento;
 import com.serratec.redeSocial.domain.Usuario;
 import com.serratec.redeSocial.dto.ComentarioDTO;
 import com.serratec.redeSocial.repository.ComentarioRepository;
@@ -12,6 +17,7 @@ import com.serratec.redeSocial.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
+@Service
 public class ComentarioService {
 
 	@Autowired
@@ -23,22 +29,35 @@ public class ComentarioService {
 	@Autowired
 	private PostagemRepository postagemRepository;
 
+	@Transactional
 	public Comentario addComment(ComentarioDTO comentarioDTO) {
-		Postagem post = postagemRepository.findById(comentarioDTO.getPostagem())
+
+		Postagem post = postagemRepository.findById(comentarioDTO.getPostagemId())
 				.orElseThrow(() -> new EntityNotFoundException("Postagem não encontrada"));
+
 		Usuario usuario = usuarioRepository.findById(comentarioDTO.getIdUsuario())
 				.orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-		if (!usuario.getseguidores().contains(post.getUsuario())) {
-			throw new IllegalArgumentException("Você precisa seguir o autor para comentar nesta postagem");
+//		if (!usuario.getRelacionamentoSeguidores().contains(post.getUsuario().getId())) {
+//			throw new IllegalArgumentException("Você precisa seguir o autor para comentar nesta postagem");
+//		}
+
+		for (Relacionamento i : usuario.getRelacionamentoSeguidores()) {
+			if (!i.getRelacionamentoPK().getSeguidor().getRelacionamentoSeguidores()
+					.contains(post.getUsuario().getId())) {
+				throw new IllegalArgumentException("Você precisa seguir o autor para comentar nesta postagem");
+			}
 		}
 
 		Comentario comentario = new Comentario();
-		comentario.setTexto(comentarioDTO.getPostagem());
+		comentario.setTexto(comentarioDTO.getTexto());
+		comentario.setDataCriacao(LocalDate.now());
 		comentario.setPostagem(post);
-		comentario.setIdUsuario(usuario);
-
-		return comentarioRepository.save(comentario);
+		comentario.setUsuario(usuario);
+		comentarioDTO.setDataCriacao(comentario.getDataCriacao());
+//		comentarioDTO.getIdUsuario().get
+		comentarioRepository.save(comentario);
+		return comentario;
 	}
 
 	/*

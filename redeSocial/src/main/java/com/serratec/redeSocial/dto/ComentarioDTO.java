@@ -3,11 +3,8 @@ package com.serratec.redeSocial.dto;
 import java.time.LocalDate;
 
 import com.serratec.redeSocial.domain.Comentario;
-import com.serratec.redeSocial.domain.Postagem;
 
 public class ComentarioDTO {
-
-	private Long id;
 
 	private Long idUsuario;
 
@@ -15,20 +12,16 @@ public class ComentarioDTO {
 
 	private LocalDate dataCriacao;
 
-	private Postagem postagem;
+	private Long postagemId;
 
 	public ComentarioDTO() {
 	}
 
 	public ComentarioDTO(Comentario comentario) {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		this.idUsuario = comentario.getUsuario().getId();
+		this.texto = comentario.getTexto();
+		this.dataCriacao = comentario.getDataCriacao();
+		this.postagemId = comentario.getPostagem().getId();
 	}
 
 	public Long getIdUsuario() {
@@ -55,12 +48,14 @@ public class ComentarioDTO {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public Postagem getPostagem() {
-		return postagem;
+	public Long getPostagemId() {
+		return postagemId;
 	}
 
-	public void setPostagem(Postagem postagem) {
-		this.postagem = postagem;
+	public void setPostagemId(Long postagemId) {
+		this.postagemId = postagemId;
 	}
+
+
 
 }
