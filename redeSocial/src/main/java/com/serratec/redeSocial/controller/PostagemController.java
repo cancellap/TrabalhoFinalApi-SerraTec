@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.serratec.redeSocial.domain.Postagem;
+import com.serratec.redeSocial.dto.PostagemDTO;
+import com.serratec.redeSocial.repository.PostagemRepository;
 import com.serratec.redeSocial.service.PostagemService;
 
 @RestController
@@ -22,25 +24,28 @@ public class PostagemController {
 
 	@Autowired
 	private PostagemService postagemService;
+	
+	@Autowired
+	private PostagemRepository postagemRepository;
 
 	@GetMapping
-	public ResponseEntity<List<Postagem>> listar() {
-		return ResponseEntity.ok(postagemService.listar());
+	public ResponseEntity<List<Postagem>> listarPostagem() {
+		return ResponseEntity.ok(postagemService.getAllListar());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> buscar() {
-		return ResponseEntity.ok(postagemService.buscarPorId(1L));
+	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {
+		return ResponseEntity.ok(postagemService.getById(1L));
 	}
 
 	@PostMapping
-	public ResponseEntity<Postagem> salvar(@RequestBody Postagem postagem) {
-		return new ResponseEntity<>(postagemService.salvar(postagem), HttpStatus.CREATED);
+	public ResponseEntity<Postagem> salvar(@RequestBody PostagemDTO postagemDTO) {
+		return new ResponseEntity<>(postagemService.save(postagemDTO), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		postagemService.deletarById(id);
+		postagemService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 }
