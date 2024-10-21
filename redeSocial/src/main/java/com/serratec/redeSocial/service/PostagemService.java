@@ -1,5 +1,6 @@
 package com.serratec.redeSocial.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +30,26 @@ public class PostagemService {
 	public List<Postagem> getAllPorUsuario(Long idUsuario) {
 		Usuario usuario = usuarioRepository.findById(idUsuario)
 				.orElseThrow(() -> new RuntimeException("Usuario não encontrado ╥﹏╥"));
-		return postagemRepository.findAllByUsuario(idUsuario);
+		return postagemRepository.findAllByUsuarioId(usuario.getId());
 	}
 
 	public Postagem getById(Long id) {
-		return postagemRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Postagem não encontrada ╥﹏╥"));
+		return postagemRepository.findById(id).orElseThrow(() -> new RuntimeException("Postagem não encontrada ╥﹏╥"));
 	}
 
 	public Postagem createPost(PostagemDTO postagemDTO) {
-	    Usuario usuario = usuarioRepository.findById(postagemDTO.getIdUsuario())
-	            .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado ╥﹏╥"));
+		Usuario usuario = usuarioRepository.findById(postagemDTO.getIdUsuario())
+				.orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado ╥﹏╥"));
 
-	    Postagem postagem = new Postagem();
-	    postagem.setTitulo(postagemDTO.getTitulo());
-	    postagem.setConteudo(postagemDTO.getConteudo());
-	    postagem.setUsuario(usuario);
-
-	    return postagemRepository.save(postagem);
+		Postagem postagem = new Postagem();
+		postagem.setTitulo(postagemDTO.getTitulo());
+		postagem.setDataCriacao(LocalDate.now());
+		postagem.setConteudo(postagemDTO.getConteudo());
+		postagem.setUsuario(usuario);
+		postagemDTO.setDataCriacao(postagem.getDataCriacao());
+		postagemRepository.save(postagem);
+		usuario.getPostagens().add(postagem);
+		return postagem;
 	}
 
 	public void delete(Long id) {
