@@ -41,14 +41,8 @@ public class ConfigSeguranca {
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize ->
                         authorize
-//                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                                 .anyRequest().authenticated()
-//                                .requestMatchers(HttpMethod.GET, "/funcionarios").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/enderecos/**").permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/usuarios/{id}").hasAuthority("ADMIN")
-//                                .requestMatchers(HttpMethod.GET, "/funcionarios/nome").hasAnyAuthority("ADMIN", "USER")
-//                                .anyRequest().authenticated()
 
                 )
                 .httpBasic(Customizer.withDefaults())
