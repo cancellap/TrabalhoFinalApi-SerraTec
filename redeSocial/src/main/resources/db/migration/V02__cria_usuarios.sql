@@ -2,7 +2,7 @@ INSERT INTO usuario (nome_usuario, sobrenome_usuario, email_usuario, senha_usuar
 VALUES ('Caique', 'Wolf Maia', 'caique@ator.com', '123456', '2024-10-20');
 
 INSERT INTO usuario (nome_usuario, sobrenome_usuario, email_usuario, senha_usuario, data_nascimento)
-VALUES ('Gabriela', 'Deutschland', 'gabizinha@coroa.com', '123456', '1930-05-23');
+VALUES ('Gabriela', 'Thunberg', 'gabizinha@greta.com', '123456', '1930-05-23');
 
 INSERT INTO usuario (nome_usuario, sobrenome_usuario, email_usuario, senha_usuario, data_nascimento)
 VALUES ('Pedro', 'Canella', 'vascovice@vice.com', '123456', '2004-08-30');
