@@ -3,6 +3,8 @@ package com.serratec.redeSocial.service;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,7 @@ import com.serratec.redeSocial.domain.Postagem;
 import com.serratec.redeSocial.domain.Relacionamento;
 import com.serratec.redeSocial.domain.Usuario;
 import com.serratec.redeSocial.dto.ComentarioDTO;
+import com.serratec.redeSocial.dto.UsuarioDTO;
 import com.serratec.redeSocial.repository.ComentarioRepository;
 import com.serratec.redeSocial.repository.PostagemRepository;
 import com.serratec.redeSocial.repository.UsuarioRepository;
@@ -28,6 +31,11 @@ public class ComentarioService {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+	
+	public Page<ComentarioDTO> findAll(Pageable pageable) {
+		Page<Comentario> comentarios = comentarioRepository.findAll(pageable);
+		return comentarios.map(ComentarioDTO:: new);
+	}
 
 	@Transactional
 	public Comentario addComment(ComentarioDTO comentarioDTO) {
@@ -60,30 +68,4 @@ public class ComentarioService {
 		return comentario;
 	}
 
-	/*
-	 * public List<ComentarioDTO> findAll() { List<Comentario> comentarios =
-	 * comentarioRepository.findAll();
-	 * 
-	 * List<ComentarioDTO> comentariosDTO =
-	 * comentarios.stream().map(ComentarioDTO::new).toList();
-	 * 
-	 * return comentariosDTO; }
-	 * 
-	 * public Optional<Comentario> buscar(Long id) { return
-	 * comentarioRepository.findById(id); }
-	 * 
-	 * @Transactional public ComentarioDTO inserir(ComentarioDTO comentarioDTO) {
-	 * 
-	 * Comentario comentario = new Comentario();
-	 * comentario.setTexto(comentarioDTO.getTexto());
-	 * comentario.setIdUsuario(comentarioDTO.getIdUsuario());
-	 * comentario.setDataCriacao(comentarioDTO.getDataCriacao());
-	 * comentario.setPostagem(comentarioDTO.getPostagem());
-	 * 
-	 * 
-	 * comentario = comentarioRepository.save(comentario);
-	 * 
-	 * ComentarioDTO comentarios = new ComentarioDTO(comentario); return
-	 * comentarios; }
-	 */
 }
