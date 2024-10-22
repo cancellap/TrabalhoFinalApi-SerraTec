@@ -2,6 +2,8 @@ package com.serratec.redeSocial.dto;
 
 import java.time.LocalDate;
 
+import com.serratec.redeSocial.domain.Postagem;
+
 public class PostagemDTO {
 
 	private String titulo;
@@ -15,19 +17,12 @@ public class PostagemDTO {
 	public PostagemDTO() {
 	}
 
-	public PostagemDTO(String titulo, String conteudo, Long idUsuario) {
+	public PostagemDTO(Postagem postagem) {
 		super();
-		this.titulo = titulo;
-		this.conteudo = conteudo;
-		this.idUsuario = idUsuario;
-	}
-
-	public LocalDate getDataCriacao() {
-		return dataCriacao;
-	}
-
-	public void setDataCriacao(LocalDate dataCriacao) {
-		this.dataCriacao = dataCriacao;
+		this.titulo = postagem.getTitulo();
+		this.conteudo = postagem.getConteudo();
+		this.idUsuario = postagem.getUsuario().getId();
+		this.dataCriacao = postagem.getDataCriacao();
 	}
 
 	public String getTitulo() {
@@ -52,6 +47,14 @@ public class PostagemDTO {
 
 	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
+	}
+
+	public LocalDate getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(LocalDate dataCriacao) {
+		this.dataCriacao = dataCriacao;
 	}
 
 }

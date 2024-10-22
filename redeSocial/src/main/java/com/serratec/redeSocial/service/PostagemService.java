@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.serratec.redeSocial.domain.Postagem;
@@ -23,8 +25,9 @@ public class PostagemService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	public List<Postagem> getAllListar() {
-		return postagemRepository.findAll();
+	public Page<PostagemDTO> findAll(Pageable pageable) {
+		Page<Postagem> postagens = postagemRepository.findAll(pageable);
+		return postagens.map(PostagemDTO:: new);
 	}
 
 	public List<Postagem> getAllPorUsuario(Long idUsuario) {
