@@ -36,7 +36,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(status).body(erroResposta);
 	}
 
-	// ResponseEntityExceptionHandler
+
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 	        HttpHeaders headers, HttpStatusCode status, WebRequest request) {

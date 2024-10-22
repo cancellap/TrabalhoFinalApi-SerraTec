@@ -27,18 +27,18 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
-	@Autowired 
+
+	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@GetMapping
 	public ResponseEntity<List<UsuarioDTO>> listar(){
 		return ResponseEntity.ok(usuarioService.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id){
 		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
@@ -48,7 +48,12 @@ public class UsuarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+///*
+//	@ post mapping("/{id}/seguir")
+//Pegar id logado pelo token
+//*/
+
+
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO){
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
@@ -59,7 +64,7 @@ public class UsuarioController {
 				.toUri();
 		return ResponseEntity.created(uri).body(usuarioDTO);
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Usuario> alterar(@PathVariable Long id,
 			@RequestBody Usuario usuario){
@@ -70,7 +75,7 @@ public class UsuarioController {
 		usuario = usuarioRepository.save(usuario);
 		return ResponseEntity.ok(usuario);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> remover(@PathVariable Long id){
 		if (!usuarioRepository.existsById(id)) {
