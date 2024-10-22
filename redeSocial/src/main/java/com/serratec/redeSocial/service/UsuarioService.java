@@ -1,9 +1,11 @@
 package com.serratec.redeSocial.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +22,12 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	public List<UsuarioDTO> findAll() {
-		List<Usuario> usuarios = usuarioRepository.findAll();
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
-		List<UsuarioDTO> usuariosDTO = usuarios.stream().map(UsuarioDTO::new).toList();
-
-		return usuariosDTO;
+	public Page<UsuarioDTO> findAll(Pageable pageable) {
+		Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+		return usuarios.map(UsuarioDTO:: new);
 	}
 
 	public Optional<Usuario> buscar(Long id) {
@@ -36,17 +38,17 @@ public class UsuarioService {
 	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
 
 		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
-			throw new SenhaException("Senhas não coincidem.");
+			throw new SenhaException("Senhas não coincidem ╥﹏╥");
 		}
 		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()).isPresent()) {
-			throw new EmailException("Email já existente.");
+			throw new EmailException("Email já existente ╥﹏╥");
 		}
 
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
-		usuario.setSenha(usuarioInserirDTO.getSenha());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 
 		usuario = usuarioRepository.save(usuario);
