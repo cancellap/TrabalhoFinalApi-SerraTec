@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,28 +16,42 @@ public class Postagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private String titulo;
+
 	private String conteudo;
 
 	private LocalDate dataCriacao;
 
-	//Uma postagem para
 	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)
 	private Set<Comentario> comentarios = new HashSet<>();
 
-	//Relação de muitos para um postagem e usuário. Não sei se precisaremos das anotações JsonBackReference e IgnoreJson
+	// Relação de muitos para um postagem e usuário. Não sei se precisaremos das
+	// anotações JsonBackReference e IgnoreJson
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 
-	public Postagem(Long id, String conteudo, LocalDate dataCriacao) {
-		super();
+	public Postagem(Long id, String titulo, String conteudo, LocalDate dataCriacao, Set<Comentario> comentarios,
+			Usuario usuario) {
 		this.id = id;
+		this.titulo = titulo;
 		this.conteudo = conteudo;
 		this.dataCriacao = dataCriacao;
+		this.comentarios = comentarios;
+		this.usuario = usuario;
 	}
 
 	public Postagem() {
 		super();
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 	public Set<Comentario> getComentarios() {

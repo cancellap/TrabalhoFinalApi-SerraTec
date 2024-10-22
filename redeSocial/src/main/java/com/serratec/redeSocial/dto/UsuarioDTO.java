@@ -8,14 +8,16 @@ public class UsuarioDTO {
 
 	private Long id;
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
 	private String email;
 	private LocalDate dataNascimento;
-	
-	public UsuarioDTO() {}
-	
+
 	public UsuarioDTO(Usuario usuario) {
-		
+		this.id = usuario.getId();
+		this.nome = usuario.getNome();
+		this.sobrenome = usuario.getSobrenome();
+		this.email = usuario.getEmail();
+		this.dataNascimento = usuario.getDataNascimento();
 	}
 
 	public Long getId() {
@@ -34,12 +36,12 @@ public class UsuarioDTO {
 		this.nome = nome;
 	}
 
-	public String getSobreNome() {
-		return sobreNome;
+	public String getSobrenome() {
+		return sobrenome;
 	}
 
-	public void setSobreNome(String sobreNome) {
-		this.sobreNome = sobreNome;
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
 	}
 
 	public String getEmail() {
@@ -57,6 +59,5 @@ public class UsuarioDTO {
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-	
-	
+
 }
