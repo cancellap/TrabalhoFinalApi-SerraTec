@@ -2,6 +2,7 @@ package com.serratec.redeSocial.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.serratec.redeSocial.domain.Usuario;
 
 public class UsuarioDTO {
@@ -10,7 +11,11 @@ public class UsuarioDTO {
 	private String nome;
 	private String sobrenome;
 	private String email;
+//	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
+	private String url;
+
+
 
 	public UsuarioDTO(Usuario usuario) {
 		this.id = usuario.getId();
@@ -18,6 +23,10 @@ public class UsuarioDTO {
 		this.sobrenome = usuario.getSobrenome();
 		this.email = usuario.getEmail();
 		this.dataNascimento = usuario.getDataNascimento();
+	}
+
+	public UsuarioDTO() {
+
 	}
 
 	public Long getId() {
@@ -60,4 +69,11 @@ public class UsuarioDTO {
 		this.dataNascimento = dataNascimento;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }
