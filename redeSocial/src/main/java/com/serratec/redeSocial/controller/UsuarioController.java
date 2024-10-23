@@ -1,25 +1,25 @@
 package com.serratec.redeSocial.controller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.serratec.redeSocial.domain.Foto;
 import com.serratec.redeSocial.domain.Relacionamento;
+import com.serratec.redeSocial.service.FotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.serratec.redeSocial.domain.Usuario;
@@ -40,6 +40,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private FotoService fotoService;
+
     @GetMapping
     public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 5)
@@ -56,6 +59,17 @@ public class UsuarioController {
             return ResponseEntity.ok(usuarioDTO);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/foto")
+    public ResponseEntity<byte[]> buscarFoto(@PathVariable long id) {
+        Foto foto = fotoService.buscarUsuarioPorId(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, foto.getTipo());
+        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(foto.getDados().length));
+
+        return new ResponseEntity<>(foto.getDados(), headers, HttpStatus.OK);
+
     }
 
 	@PostMapping("/seguir/{id}")
@@ -80,7 +94,10 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
-
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity <UsuarioDTO> inserir(@RequestPart MultipartFile file, @RequestPart Usuario usuario) throws IOException {
+        return ResponseEntity.ok(usuarioService.inserirFoto(usuario, file));
+    }
 
 
     @PostMapping
