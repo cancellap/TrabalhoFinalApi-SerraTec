@@ -174,5 +174,4 @@ public class UsuarioService {
         }
         return adicionarFotoUri(usuarioOpt.get());
     }
-
 }
