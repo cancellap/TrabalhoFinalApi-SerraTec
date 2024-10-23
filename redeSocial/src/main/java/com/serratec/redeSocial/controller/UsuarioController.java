@@ -97,17 +97,28 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/seguir/{id}")
+    @GetMapping("/seguindo/{id}")
+    public ResponseEntity<Set<UsuarioDTO>> buscarSeguindo(@PathVariable Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isPresent()) {
+            Set<UsuarioDTO> seguindo = usuarioOpt.get().getRelacionamentoSeguidores().stream()
+                    .map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguido()))
+                    .collect(Collectors.toSet());
+
+            return ResponseEntity.ok(seguindo);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/seguidores/{id}")
     public ResponseEntity<Set<UsuarioDTO>> buscarSeguidores(@PathVariable Long id) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
         if (usuarioOpt.isPresent()) {
-            Set<UsuarioDTO> teste = usuarioOpt.get().getRelacionamentoSeguidores().stream()
-                    .map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguido()))
+            Set<UsuarioDTO> seguidores = usuarioOpt.get().getRelacionamentoSeguindo().stream()
+                    .map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguidor()))
                     .collect(Collectors.toSet());
-            System.out.println(usuarioOpt.get().getRelacionamentoSeguidores().size());
-            System.out.println(usuarioOpt.get().getRelacionamentoSeguindo().size());
 
-            return ResponseEntity.ok(teste);
+            return ResponseEntity.ok(seguidores);
         }
         return ResponseEntity.notFound().build();
     }
