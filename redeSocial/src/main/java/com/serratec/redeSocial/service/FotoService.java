@@ -18,7 +18,7 @@ public class FotoService {
     @Autowired
     private FotoRepository fotoRepository;
 
-    public Foto inserirFoto (Usuario usuario, MultipartFile file) throws IOException {
+    public Foto inserir (Usuario usuario, MultipartFile file) throws IOException {
 
         Foto foto = new Foto();
         foto.setNome(file.getName());

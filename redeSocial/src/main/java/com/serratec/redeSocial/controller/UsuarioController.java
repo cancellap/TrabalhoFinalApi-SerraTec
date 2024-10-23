@@ -113,8 +113,8 @@ public class UsuarioController {
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity <UsuarioDTO> inserir(@RequestPart MultipartFile file, @RequestPart Usuario usuario) throws IOException {
-        return ResponseEntity.ok(usuarioService.inserirFoto(usuario, file));
+    public ResponseEntity <UsuarioDTO> inserir(@RequestPart MultipartFile file, @RequestPart UsuarioInserirDTO usuarioInserirDTO) throws IOException {
+        return ResponseEntity.ok(usuarioService.inserirFoto(usuarioInserirDTO, file));
     }
 
 

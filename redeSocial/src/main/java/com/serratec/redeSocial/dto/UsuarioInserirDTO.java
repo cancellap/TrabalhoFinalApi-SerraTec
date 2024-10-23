@@ -36,6 +36,22 @@ public class UsuarioInserirDTO {
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
 
+	private String url;
+
+	public UsuarioInserirDTO() {
+
+	}
+
+	public UsuarioInserirDTO(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento ) {
+		this.id = id;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.email = email;
+		this.senha = senha;
+		this.dataNascimento = dataNascimento;
+
+	}
+
 	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
@@ -92,4 +108,11 @@ public class UsuarioInserirDTO {
 		this.senhaConfirma = senhaConfirma;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }
