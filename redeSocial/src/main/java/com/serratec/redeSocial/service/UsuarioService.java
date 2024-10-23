@@ -34,120 +34,134 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
-    @Autowired
-    private HttpServletRequest httpServletRequest;
+	@Autowired
+	private HttpServletRequest httpServletRequest;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	@Autowired
+	private JwtUtil jwtUtil;
 
-    @Autowired
-    private RelacionamentoPKService relacionamentoPKService;
+	@Autowired
+	private RelacionamentoPKService relacionamentoPKService;
 
-    @Autowired
-    private RelacionamentoRepository relacionamentoRepository;
+	@Autowired
+	private RelacionamentoRepository relacionamentoRepository;
 
-    @Autowired
-    private FotoService fotoService;
+	@Autowired
+	private FotoService fotoService;
 
-    public Page<UsuarioDTO> findAll(Pageable pageable) {
-        Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
-        return usuarios.map(UsuarioDTO::new);
-    }
+	public Page<UsuarioDTO> findAll(Pageable pageable) {
+		Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+		return usuarios.map(UsuarioDTO::new);
+	}
 
 //    public Optional<Usuario> buscar(Long id) {
 //        return usuarioRepository.findById(id);
 //    }
 
-    @Transactional
-    public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
+	@Transactional
+	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) {
 
-        if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
-            throw new SenhaException("Senhas não coincidem ╥﹏╥");
-        }
-        if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()).isPresent()) {
-            throw new EmailException("Email já existente ╥﹏╥");
-        }
+		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getSenhaConfirma())) {
+			throw new SenhaException("Senhas não coincidem ╥﹏╥");
+		}
+		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()).isPresent()) {
+			throw new EmailException("Email já existente ╥﹏╥");
+		}
 
-        Usuario usuario = new Usuario();
-        usuario.setNome(usuarioInserirDTO.getNome());
-        usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
-        usuario.setEmail(usuarioInserirDTO.getEmail());
-        usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-        usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+		Usuario usuario = new Usuario();
+		usuario.setNome(usuarioInserirDTO.getNome());
+		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
+		usuario.setEmail(usuarioInserirDTO.getEmail());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 
-        usuario = usuarioRepository.save(usuario);
+		usuario = usuarioRepository.save(usuario);
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        return usuarioDTO;
-    }
+		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+		return usuarioDTO;
+	}
 
-    public UsuarioDTO alterarUsuario(UsuarioInserirDTO usuarioInserirDTO, Long id) {
+	public UsuarioDTO alterarUsuario(UsuarioInserirDTO usuarioInserirDTO, Long id) {
 
-        Usuario user = new Usuario();
-        user.setId(id);
-        user.setNome(usuarioInserirDTO.getNome());
-        user.setSobrenome(usuarioInserirDTO.getSobrenome());
-        user.setEmail(usuarioInserirDTO.getEmail());
-        user.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-        user.setDataNascimento(usuarioInserirDTO.getDataNascimento());
-        user = usuarioRepository.save(user);
-        UsuarioDTO usuarioDTO = new UsuarioDTO(user);
+		Usuario user = new Usuario();
+		user.setId(id);
+		user.setNome(usuarioInserirDTO.getNome());
+		user.setSobrenome(usuarioInserirDTO.getSobrenome());
+		user.setEmail(usuarioInserirDTO.getEmail());
+		user.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+		user.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+		user = usuarioRepository.save(user);
+		UsuarioDTO usuarioDTO = new UsuarioDTO(user);
 
-        return usuarioDTO;
+		return usuarioDTO;
 
-    }
+	}
 
+	public Relacionamento seguir(Long idSecundario) {
 
-    public Relacionamento seguir(Long idSecundario) {
+		String token = httpServletRequest.getHeader("Authorization");
+		token = token.substring(7);
 
+		String email = jwtUtil.getUserName(token);
+		Long id = usuarioRepository.findByEmail(email).get().getId();
 
-        String token = httpServletRequest.getHeader("Authorization");
-        token = token.substring(7);
+		Relacionamento relacionamento = new Relacionamento(relacionamentoPKService.criaPK(id, idSecundario),
+				LocalDate.now());
 
-        String email = jwtUtil.getUserName(token);
-        Long id = usuarioRepository.findByEmail(email).get().getId();
+		relacionamentoRepository.save(relacionamento);
 
+		return relacionamento;
+	}
 
-        Relacionamento relacionamento = new Relacionamento(
-                relacionamentoPKService.criaPK(id, idSecundario), LocalDate.now());
+	public UsuarioDTO inserirFoto(UsuarioInserirDTO usuarioInserirDTO, MultipartFile file) throws IOException {
 
-        relacionamentoRepository.save(relacionamento);
+		Usuario usuario = new Usuario();
 
-        return relacionamento;
-    }
+		usuario.setNome(usuarioInserirDTO.getNome());
+		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
+		usuario.setEmail(usuarioInserirDTO.getEmail());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 
-    public UsuarioDTO inserirFoto(UsuarioInserirDTO usuarioInserirDTO, MultipartFile file) throws IOException {
+		usuario = usuarioRepository.save(usuario);
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuarios/{id}/foto")
+				.buildAndExpand(usuario.getId()).toUri();
+		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+		usuarioDTO.setUrl(uri.toString());
+		fotoService.inserir(usuario, file);
+		adicionarFotoUri(usuario);
 
+		return usuarioDTO;
+	}
 
-        Usuario usuario = new Usuario();
+	public UsuarioDTO adicionarFotoUri(Usuario usuario) {
 
-        usuario.setNome(usuarioInserirDTO.getNome());
-        usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
-        usuario.setEmail(usuarioInserirDTO.getEmail());
-        usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-        usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuarios/{id}/foto")
+				.buildAndExpand(usuario.getId()).toUri();
 
-        usuario = usuarioRepository.save(usuario);
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuarios/{id}/foto")
-                .buildAndExpand(usuario.getId()).toUri();
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        usuarioDTO.setUrl(uri.toString());
-        fotoService.inserir(usuario, file);
-        adicionarFotoUri(usuario);
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setNome(usuario.getNome());
+		usuarioDTO.setSobrenome(usuario.getSobrenome());
+		usuarioDTO.setEmail(usuario.getEmail());
+		usuarioDTO.setDataNascimento(usuario.getDataNascimento());
+		usuarioDTO.setUrl(uri.toString());
 
-        return usuarioDTO;
-    }
+		return usuarioDTO;
 
-    public UsuarioDTO adicionarFotoUri(Usuario usuario) {
+	}
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuarios/{id}/foto")
-                .buildAndExpand(usuario.getId()).toUri();
+	// Convertando usuario em usuarioInserirDTO e pega a foto
+	public List<UsuarioDTO> listar() {
+		List<UsuarioDTO> usuarios = usuarioRepository.findAll().stream().map(u -> adicionarFotoUri(u)).toList();
+		return usuarios;
+	}
+
 
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setNome(usuario.getNome());
@@ -174,4 +188,5 @@ public class UsuarioService {
         }
         return adicionarFotoUri(usuarioOpt.get());
     }
+
 }
