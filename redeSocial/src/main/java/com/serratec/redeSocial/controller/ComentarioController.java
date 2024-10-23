@@ -29,7 +29,7 @@ public class ComentarioController {
 	
 	@GetMapping
 	public ResponseEntity<Page<ComentarioDTO>> listarPaginado(
-			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 5) 
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 40)
 			Pageable pageable) {
 		Page<ComentarioDTO> comentarios = comentarioService.findAll(pageable);
 		return ResponseEntity.ok(comentarios);

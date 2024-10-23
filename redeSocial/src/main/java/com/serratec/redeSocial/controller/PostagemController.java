@@ -32,7 +32,7 @@ public class PostagemController {
 	
 	@GetMapping
 	public ResponseEntity<Page<PostagemDTO>> listarPaginado(
-			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 5) 
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 50)
 			Pageable pageable) {
 		Page<PostagemDTO> postagens = postagemService.findAll(pageable);
 		return ResponseEntity.ok(postagens);
