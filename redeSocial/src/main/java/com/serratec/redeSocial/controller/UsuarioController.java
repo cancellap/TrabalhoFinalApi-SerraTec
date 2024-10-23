@@ -28,7 +28,6 @@ import com.serratec.redeSocial.dto.UsuarioInserirDTO;
 import com.serratec.redeSocial.repository.UsuarioRepository;
 import com.serratec.redeSocial.service.UsuarioService;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,17 +39,16 @@ import jakarta.validation.Valid;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+	@Autowired
+	private UsuarioService usuarioService;
 
-    @Autowired
-    private UsuarioService usuarioService;
+	@Autowired
+	private FotoService fotoService;
 
-    @Autowired
-    private FotoService fotoService;
-
-   @Operation(summary = "Lista todos os serviços de forma paginada", description = "Retorna uma lista paginada de serviços com ID, descrição e valor. Permite controle sobre o número da página e o tamanho dos resultados.")
+	@Operation(summary = "Lista todos os serviços de forma paginada", description = "Retorna uma lista paginada de serviços com ID, descrição e valor. Permite controle sobre o número da página e o tamanho dos resultados.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", content = {
 			@Content(schema = @Schema(implementation = Page.class), mediaType = "application/json") }, description = "Retorna uma lista paginada de serviços."),
 			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
@@ -79,80 +77,79 @@ public class UsuarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-    @GetMapping("/{id}/foto")
-    public ResponseEntity<byte[]> buscarFoto(@PathVariable long id) {
-        Foto foto = fotoService.buscarUsuarioPorId(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, foto.getTipo());
-        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(foto.getDados().length));
 
-        return new ResponseEntity<>(foto.getDados(), headers, HttpStatus.OK);
+	@GetMapping("/{id}/foto")
+	public ResponseEntity<byte[]> buscarFoto(@PathVariable long id) {
+		Foto foto = fotoService.buscarUsuarioPorId(id);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_TYPE, foto.getTipo());
+		headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(foto.getDados().length));
 
-    }
+		return new ResponseEntity<>(foto.getDados(), headers, HttpStatus.OK);
+
+	}
 
 	@PostMapping("/seguir/{id}")
-    public ResponseEntity<Relacionamento> inserirRelacionamento(@PathVariable Long id) {
+	public ResponseEntity<Relacionamento> inserirRelacionamento(@PathVariable Long id) {
 
-        usuarioService.seguir(id);
-        return ResponseEntity.ok().build();
-    }
+		usuarioService.seguir(id);
+		return ResponseEntity.ok().build();
+	}
 
-    @GetMapping("/seguindo/{id}")
-    public ResponseEntity<Set<UsuarioDTO>> buscarSeguindo(@PathVariable Long id) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
-        if (usuarioOpt.isPresent()) {
-            Set<UsuarioDTO> seguindo = usuarioOpt.get().getRelacionamentoSeguidores().stream()
-                    .map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguido()))
-                    .collect(Collectors.toSet());
+	@GetMapping("/seguindo/{id}")
+	public ResponseEntity<Set<UsuarioDTO>> buscarSeguindo(@PathVariable Long id) {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isPresent()) {
+			Set<UsuarioDTO> seguindo = usuarioOpt.get().getRelacionamentoSeguidores().stream()
+					.map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguido())).collect(Collectors.toSet());
 
-            return ResponseEntity.ok(seguindo);
-        }
-        return ResponseEntity.notFound().build();
-    }
+			return ResponseEntity.ok(seguindo);
+		}
+		return ResponseEntity.notFound().build();
+	}
 
-    @GetMapping("/seguidores/{id}")
-    public ResponseEntity<Set<UsuarioDTO>> buscarSeguidores(@PathVariable Long id) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
-        if (usuarioOpt.isPresent()) {
-            Set<UsuarioDTO> seguidores = usuarioOpt.get().getRelacionamentoSeguindo().stream()
-                    .map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguidor()))
-                    .collect(Collectors.toSet());
+	@GetMapping("/seguidores/{id}")
+	public ResponseEntity<Set<UsuarioDTO>> buscarSeguidores(@PathVariable Long id) {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isPresent()) {
+			Set<UsuarioDTO> seguidores = usuarioOpt.get().getRelacionamentoSeguindo().stream()
+					.map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguidor())).collect(Collectors.toSet());
 
-            return ResponseEntity.ok(seguidores);
-        }
-        return ResponseEntity.notFound().build();
-    }
+			return ResponseEntity.ok(seguidores);
+		}
+		return ResponseEntity.notFound().build();
+	}
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity <UsuarioDTO> inserir(@RequestPart MultipartFile file, @RequestPart UsuarioInserirDTO usuarioInserirDTO) throws IOException {
-        return ResponseEntity.ok(usuarioService.inserirFoto(usuarioInserirDTO, file));
-    }
+	@PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	public ResponseEntity<UsuarioDTO> inserir(@RequestPart MultipartFile file,
+			@RequestPart UsuarioInserirDTO usuarioInserirDTO) throws IOException {
+		return ResponseEntity.ok(usuarioService.inserirFoto(usuarioInserirDTO, file));
+	}
 
+	@PostMapping
+	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioDTO.getId())
+				.toUri();
+		return ResponseEntity.created(uri).body(usuarioDTO);
+	}
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
-        UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioDTO.getId())
-                .toUri();
-        return ResponseEntity.created(uri).body(usuarioDTO);
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<UsuarioDTO> alterar(@PathVariable Long id, @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+		if (!usuarioRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		UsuarioDTO usuarioDTO = usuarioService.alterarUsuario(usuarioInserirDTO, id);
+		return ResponseEntity.ok(usuarioDTO);
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> alterar(@PathVariable Long id, @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
-        if (!usuarioRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        UsuarioDTO usuarioDTO = usuarioService.alterarUsuario(usuarioInserirDTO, id);
-        return ResponseEntity.ok(usuarioDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remover(@PathVariable Long id) {
-        if (!usuarioRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        usuarioRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> remover(@PathVariable Long id) {
+		if (!usuarioRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		usuarioRepository.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
 
 }

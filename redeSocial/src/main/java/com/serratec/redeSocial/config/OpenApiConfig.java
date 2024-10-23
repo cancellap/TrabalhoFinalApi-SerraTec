@@ -15,10 +15,10 @@ import io.swagger.v3.oas.models.servers.Server;
 public class OpenApiConfig {
 
 	@Value("${dominio.openapi.dev-url}")
-    private String devUrl;
+	private String devUrl;
 
-    @Value("${dominio.openapi.prod-url}")
-    private String proUrl;
+	@Value("${dominio.openapi.prod-url}")
+	private String proUrl;
 
 	@Bean
 	OpenAPI myOpenAPI() {
@@ -37,10 +37,11 @@ public class OpenApiConfig {
 
 		License apacheLicense = new License().name("Apache License").url("https://www.apache.org/license/LICENSE-2.0");
 
-		Info info = new Info().title("API de teste para Rede social").version("1.0").contact(contact).description("API de Rede Social")
-				.termsOfService("https://www.meudominio.com.br/termos").license(apacheLicense);
+		Info info = new Info().title("API de teste para Rede social").version("1.0").contact(contact)
+				.description("API de Rede Social").termsOfService("https://www.meudominio.com.br/termos")
+				.license(apacheLicense);
 
 		return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
 	}
 
-} 
+}

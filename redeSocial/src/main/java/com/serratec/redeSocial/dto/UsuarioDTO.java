@@ -11,11 +11,8 @@ public class UsuarioDTO {
 	private String nome;
 	private String sobrenome;
 	private String email;
-//	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
 	private String url;
-
-
 
 	public UsuarioDTO(Usuario usuario) {
 		this.id = usuario.getId();

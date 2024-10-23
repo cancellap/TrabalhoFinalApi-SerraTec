@@ -14,7 +14,6 @@ public class RelacionamentoPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-
 	@ManyToOne
 	@JoinColumn(name = "id_principal")
 	private Usuario seguidor;
@@ -30,7 +29,7 @@ public class RelacionamentoPK implements Serializable {
 	}
 
 	public RelacionamentoPK() {
-			}
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

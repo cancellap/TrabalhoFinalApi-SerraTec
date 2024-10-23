@@ -26,8 +26,6 @@ public class Postagem {
 	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)
 	private Set<Comentario> comentarios = new HashSet<>();
 
-	// Relação de muitos para um postagem e usuário. Não sei se precisaremos das
-	// anotações JsonBackReference e IgnoreJson
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")

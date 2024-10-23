@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Comentario {
@@ -20,10 +21,11 @@ public class Comentario {
 	private Usuario usuario;
 
 	@JsonBackReference
-	@ManyToOne // Muitos comentários para uma postagem
+	@ManyToOne
 	@JoinColumn(name = "postagem_id")
 	private Postagem postagem;
 
+	@NotBlank(message = "O campo texto não pode estar vazio")
 	private String texto;
 
 	@Column(name = "data_criacao")
