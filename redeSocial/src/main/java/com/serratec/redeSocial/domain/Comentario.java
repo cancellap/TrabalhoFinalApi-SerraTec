@@ -21,13 +21,12 @@ public class Comentario {
 	private Usuario usuario;
 
 	@JsonBackReference
-	@ManyToOne 
+	@ManyToOne
 	@JoinColumn(name = "postagem_id")
 	private Postagem postagem;
 
 	@NotBlank(message = "O campo texto não pode estar vazio")
 	private String texto;
-
 
 	@Column(name = "data_criacao")
 	private LocalDate dataCriacao;

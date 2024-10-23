@@ -13,16 +13,16 @@ import java.util.Optional;
 @Service
 public class UsuarioDetalheImpl implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(username);
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(username);
 
-        if (usuario.isEmpty()) {
-            throw new RuntimeException();
-        }
-        return usuario.get();
-    }
+		if (usuario.isEmpty()) {
+			throw new RuntimeException();
+		}
+		return usuario.get();
+	}
 }

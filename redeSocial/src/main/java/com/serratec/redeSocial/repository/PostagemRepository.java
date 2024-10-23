@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import com.serratec.redeSocial.domain.Postagem;
 
 @Repository
-public interface PostagemRepository extends JpaRepository<Postagem, Long>{
+public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 
 	List<Postagem> findAllByUsuarioId(Long usuarioId);
-	
+
 	Optional<Postagem> findById(Postagem postagem);
-	
+
 	Page<Postagem> findAll(Pageable pageable);
 }

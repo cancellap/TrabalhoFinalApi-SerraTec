@@ -7,18 +7,9 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 
-//	atribudos vindos do RelacionamentoPK atraves do EmbededId
-//	
-//	notacoes para join no banco de dados	
-//	
-
 @Entity
 public class Relacionamento {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Long id;
-//	
 	@EmbeddedId
 	private RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
 

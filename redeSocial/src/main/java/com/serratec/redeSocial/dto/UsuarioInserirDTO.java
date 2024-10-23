@@ -32,7 +32,7 @@ public class UsuarioInserirDTO {
 
 	@NotBlank(message = "Senha do usuario deve ser preenchida")
 	private String senhaConfirma;
-//	@JsonFormat(pattern = "dd/MM/yyyy")
+
 	private LocalDate dataNascimento;
 
 	private String url;
