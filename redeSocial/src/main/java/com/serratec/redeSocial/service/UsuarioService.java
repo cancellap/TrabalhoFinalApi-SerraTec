@@ -11,6 +11,7 @@ import com.serratec.redeSocial.repository.RelacionamentoRepository;
 import com.serratec.redeSocial.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -45,7 +46,6 @@ public class UsuarioService {
 
     @Autowired
     private RelacionamentoRepository relacionamentoRepository;
-
 
     public Page<UsuarioDTO> findAll(Pageable pageable) {
         Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
@@ -98,7 +98,6 @@ public class UsuarioService {
 
     public Relacionamento seguir(Long idSecundario) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         String token = httpServletRequest.getHeader("Authorization");
         token = token.substring(7);
@@ -106,13 +105,13 @@ public class UsuarioService {
         String email = jwtUtil.getUserName(token);
         Long id = usuarioRepository.findByEmail(email).get().getId();
 
-        LocalDate dataFormatada = LocalDate.parse(LocalDate.now().format(formatter), formatter);
+
 
         Relacionamento relacionamento = new Relacionamento(
-                relacionamentoPKService.criaPK(usuarioRepository.findByEmail(email).get(), usuarioRepository.findById(idSecundario).get()), dataFormatada);
-        Set<Relacionamento> relacionamentoSeguidores = usuarioRepository.findByEmail(email).get().getRelacionamentoSeguidores();
-        relacionamentoSeguidores.add(relacionamento);
+                relacionamentoPKService.criaPK(id, idSecundario), LocalDate.now());
+
         relacionamentoRepository.save(relacionamento);
+
         return relacionamento;
     }
 

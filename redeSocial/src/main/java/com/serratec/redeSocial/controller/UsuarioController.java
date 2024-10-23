@@ -2,6 +2,8 @@ package com.serratec.redeSocial.controller;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.serratec.redeSocial.domain.Relacionamento;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,22 @@ public class UsuarioController {
         usuarioService.seguir(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/seguir/{id}")
+    public ResponseEntity<Set<UsuarioDTO>> buscarSeguidores(@PathVariable Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isPresent()) {
+            Set<UsuarioDTO> teste = usuarioOpt.get().getRelacionamentoSeguidores().stream()
+                    .map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguido()))
+                    .collect(Collectors.toSet());
+            System.out.println(usuarioOpt.get().getRelacionamentoSeguidores().size());
+            System.out.println(usuarioOpt.get().getRelacionamentoSeguindo().size());
+
+            return ResponseEntity.ok(teste);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
 
 
