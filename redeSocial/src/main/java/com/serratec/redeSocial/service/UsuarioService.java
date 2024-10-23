@@ -42,12 +42,11 @@ public class UsuarioService {
 
     @Autowired
     private RelacionamentoPKService relacionamentoPKService;
+
     @Autowired
     private RelacionamentoRepository relacionamentoRepository;
 
-    @Autowired
-    private RelacionamentoPK relacionamentoPK;
-    
+
     public Page<UsuarioDTO> findAll(Pageable pageable) {
         Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
         return usuarios.map(UsuarioDTO::new);
