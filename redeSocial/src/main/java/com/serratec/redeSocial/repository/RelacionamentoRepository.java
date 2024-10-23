@@ -14,4 +14,5 @@ public interface RelacionamentoRepository extends JpaRepository<Relacionamento, 
 
 	Optional<Usuario> findByRelacionamentoPK_Seguidor(Usuario seguidor);
 
+
 }

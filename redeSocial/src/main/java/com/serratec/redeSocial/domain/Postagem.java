@@ -20,6 +20,7 @@ public class Postagem {
 
 	private String conteudo;
 
+	@Column(name = "data_criacao")
 	private LocalDate dataCriacao;
 
 	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)

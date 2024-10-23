@@ -19,6 +19,14 @@ public class RelacionamentoPK implements Serializable {
 	@JoinColumn(name = "id_secundario")
 	private Usuario seguido;
 
+	public RelacionamentoPK(Usuario seguidor, Usuario seguido) {
+		this.seguidor = seguidor;
+		this.seguido = seguido;
+	}
+
+	public RelacionamentoPK() {
+			}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
