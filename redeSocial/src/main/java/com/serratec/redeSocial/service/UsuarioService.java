@@ -162,31 +162,12 @@ public class UsuarioService {
 		return usuarios;
 	}
 
-
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setNome(usuario.getNome());
-        usuarioDTO.setSobrenome(usuario.getSobrenome());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setDataNascimento(usuario.getDataNascimento());
-        usuarioDTO.setUrl(uri.toString());
-
-        return usuarioDTO;
-
-
-    }
-
-    //Convertando usuario em usuarioInserirDTO e pega a foto
-    public List<UsuarioDTO> listar() {
-        List<UsuarioDTO> usuarios = usuarioRepository.findAll().stream().map(u -> adicionarFotoUri(u)).toList();
-        return usuarios;
-    }
-
-    public UsuarioDTO buscar(Long id) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
-        if (usuarioOpt.isEmpty()) {
-            return null;
-        }
-        return adicionarFotoUri(usuarioOpt.get());
-    }
+	public UsuarioDTO buscar(Long id) {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isEmpty()) {
+			return null;
+		}
+		return adicionarFotoUri(usuarioOpt.get());
+	}
 
 }
