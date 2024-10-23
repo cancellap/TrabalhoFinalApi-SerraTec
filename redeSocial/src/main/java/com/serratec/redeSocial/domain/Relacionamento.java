@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 
 //	atribudos vindos do RelacionamentoPK atraves do EmbededId
 //	
@@ -22,6 +23,7 @@ public class Relacionamento {
 	private RelacionamentoPK relacionamentoPK = new RelacionamentoPK();
 
 	@Column(name = "data_de_inicio")
+
 	private LocalDate dataDeInicio;
 
 	public Relacionamento(RelacionamentoPK relacionamentoPK, LocalDate dataDeInicio) {
