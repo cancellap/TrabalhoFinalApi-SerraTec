@@ -122,14 +122,29 @@ public class UsuarioService {
         return relacionamento;
     }
 
-    public UsuarioDTO inserirFoto(Usuario usuario, MultipartFile file) throws IOException {
+    public UsuarioDTO inserirFoto(UsuarioInserirDTO usuarioInserirDTO, MultipartFile file) throws IOException {
 
-        Usuario usuarioInserirFoto = usuarioRepository.save(usuario);
-        fotoService.inserirFoto(usuario, file);
-        return adicionarFoto(usuario);
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNome(usuarioInserirDTO.getNome());
+        usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
+        usuario.setEmail(usuarioInserirDTO.getEmail());
+        usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+        usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+
+        usuario = usuarioRepository.save(usuario);
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuarios/{id}/foto")
+                .buildAndExpand(usuario.getId()).toUri();
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        usuarioDTO.setUrl(uri.toString());
+        fotoService.inserir(usuario, file);
+        adicionarFotoUri(usuario);
+
+        return usuarioDTO;
     }
 
-    public UsuarioDTO adicionarFoto(Usuario usuario) {
+    public UsuarioDTO adicionarFotoUri(Usuario usuario) {
 
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/usuarios/{id}/foto")
                 .buildAndExpand(usuario.getId()).toUri();
@@ -140,12 +155,15 @@ public class UsuarioService {
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setDataNascimento(usuario.getDataNascimento());
         usuarioDTO.setUrl(uri.toString());
+
         return usuarioDTO;
+
 
     }
 
+    //Convertando usuario em usuarioInserirDTO e pega a foto
     public List<UsuarioDTO> listar() {
-        List<UsuarioDTO> usuarios = usuarioRepository.findAll().stream().map(u -> adicionarFoto(u)).toList();
+        List<UsuarioDTO> usuarios = usuarioRepository.findAll().stream().map(u -> adicionarFotoUri(u)).toList();
         return usuarios;
     }
 
@@ -154,6 +172,7 @@ public class UsuarioService {
         if (usuarioOpt.isEmpty()) {
             return null;
         }
-        return adicionarFoto(usuarioOpt.get());
+        return adicionarFotoUri(usuarioOpt.get());
     }
+
 }
