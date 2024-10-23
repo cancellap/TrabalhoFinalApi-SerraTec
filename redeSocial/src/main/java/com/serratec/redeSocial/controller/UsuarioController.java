@@ -2,7 +2,10 @@ package com.serratec.redeSocial.controller;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.serratec.redeSocial.domain.Relacionamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +42,7 @@ public class UsuarioController {
 
 	@GetMapping
 	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
-			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 5) 
-			Pageable pageable) {
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 5) Pageable pageable) {
 		Page<UsuarioDTO> usuarios = usuarioService.findAll(pageable);
 		return ResponseEntity.ok(usuarios);
 	}
@@ -54,10 +56,26 @@ public class UsuarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-///*
-//	@ post mapping("/{id}/seguir")
-//Pegar id logado pelo token
-//*/
+
+	@PostMapping("/seguir/{id}")
+	public ResponseEntity<Relacionamento> inserirRelacionamento(@PathVariable Long id) {
+		usuarioService.seguir(id);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/seguindo/{id}")
+	public ResponseEntity<Set<UsuarioDTO>> buscarSeguidores(@PathVariable Long id) {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isPresent()) {
+			Set<UsuarioDTO> teste = usuarioOpt.get().getRelacionamentoSeguidores().stream()
+					.map(i -> new UsuarioDTO(i.getRelacionamentoPK().getSeguido())).collect(Collectors.toSet());
+			System.out.println(usuarioOpt.get().getRelacionamentoSeguidores().size());
+			System.out.println(usuarioOpt.get().getRelacionamentoSeguindo().size());
+
+			return ResponseEntity.ok(teste);
+		}
+		return ResponseEntity.notFound().build();
+	}
 
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> inserir(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
@@ -68,13 +86,12 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> alterar(@PathVariable Long id, @RequestBody Usuario usuario) {
+	public ResponseEntity<UsuarioDTO> alterar(@PathVariable Long id, @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
 		if (!usuarioRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
-		usuario.setId(id);
-		usuario = usuarioRepository.save(usuario);
-		return ResponseEntity.ok(usuario);
+		UsuarioDTO usuarioDTO = usuarioService.alterarUsuario(usuarioInserirDTO, id);
+		return ResponseEntity.ok(usuarioDTO);
 	}
 
 	@DeleteMapping("/{id}")

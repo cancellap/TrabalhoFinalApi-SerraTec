@@ -1,7 +1,12 @@
 package com.serratec.redeSocial.service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
+import com.serratec.redeSocial.domain.Relacionamento;
+import com.serratec.redeSocial.repository.RelacionamentoRepository;
+import com.serratec.redeSocial.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +30,20 @@ public class UsuarioService {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+
+	@Autowired
+	private JwtUtil jwtUtil;
+
+	@Autowired
+	private RelacionamentoPKService relacionamentoPKService;
+	@Autowired
+	private RelacionamentoRepository relacionamentoRepository;
+
 	public Page<UsuarioDTO> findAll(Pageable pageable) {
 		Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
-		return usuarios.map(UsuarioDTO:: new);
+		return usuarios.map(UsuarioDTO::new);
 	}
 
 	public Optional<Usuario> buscar(Long id) {
@@ -55,6 +71,38 @@ public class UsuarioService {
 
 		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 		return usuarioDTO;
+	}
+
+	public UsuarioDTO alterarUsuario(UsuarioInserirDTO usuarioInserirDTO, Long id) {
+
+		Usuario user = new Usuario();
+		user.setId(id);
+		user.setNome(usuarioInserirDTO.getNome());
+		user.setSobrenome(usuarioInserirDTO.getSobrenome());
+		user.setEmail(usuarioInserirDTO.getEmail());
+		user.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+		user.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+		user = usuarioRepository.save(user);
+		UsuarioDTO usuarioDTO = new UsuarioDTO(user);
+
+		return usuarioDTO;
+
+	}
+
+	public Relacionamento seguir(Long idSecundario) {
+
+		String token = httpServletRequest.getHeader("Authorization");
+		token = token.substring(7);
+
+		String email = jwtUtil.getUserName(token);
+		Long id = usuarioRepository.findByEmail(email).get().getId();
+
+		Relacionamento relacionamento = new Relacionamento(relacionamentoPKService.criaPK(id, idSecundario),
+				LocalDate.now());
+
+		relacionamentoRepository.save(relacionamento);
+
+		return relacionamento;
 	}
 
 }
