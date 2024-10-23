@@ -1,0 +1,51 @@
+package com.serratec.redeSocial.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
+
+@Component
+public class JwtUtil {
+
+	private String jwtSecret = "wOXx9za7W4cPn1J3Cu7ORa2nuw5Wm5bM";
+
+	private Long jwtExpirationMiliseg = 90000000L;
+
+	public String generateToken(String username) {
+		SecretKey secreKeySpec = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+		return Jwts.builder().setSubject(username)
+				.setExpiration(new Date(System.currentTimeMillis() + this.jwtExpirationMiliseg)).signWith(secreKeySpec)
+				.compact();
+	}
+
+	public boolean isValidToken(String token) {
+		Claims claims = getClaims(token);
+		if (claims != null) {
+			String username = claims.getSubject();
+			Date expirationDate = claims.getExpiration();
+			Date now = new Date(System.currentTimeMillis());
+			if (username != null && expirationDate != null && now.before(expirationDate)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getUserName(String token) {
+		Claims claims = getClaims(token);
+		if (claims != null) {
+			return claims.getSubject();
+		}
+		return null;
+	}
+
+	public Claims getClaims(String token) {
+		return Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token).getBody();
+	}
+
+}
