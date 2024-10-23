@@ -32,7 +32,7 @@ public class PostagemController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {
-		return ResponseEntity.ok(postagemService.getById(1L));
+		return ResponseEntity.ok(postagemService.getById(id));
 	}
 
 	@PostMapping
