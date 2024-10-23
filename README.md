@@ -14,6 +14,6 @@ Este projeto foi desenvolvido em grupo por:
 - Caique Ramos
 - Matheus Aguiar
 - Gabriela Reissinger
-- Gabriel Brega
+- Gabriel Braga
 - Aline Seiberth
 - Pedro Cancella
