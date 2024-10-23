@@ -28,12 +28,9 @@ public class PostagemController {
 	@Autowired
 	private PostagemService postagemService;
 
-
-	
 	@GetMapping
 	public ResponseEntity<Page<PostagemDTO>> listarPaginado(
-			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 50)
-			Pageable pageable) {
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 50) Pageable pageable) {
 		Page<PostagemDTO> postagens = postagemService.findAll(pageable);
 		return ResponseEntity.ok(postagens);
 	}
@@ -46,8 +43,8 @@ public class PostagemController {
 	@PostMapping
 	public ResponseEntity<PostagemDTO> salvar(@RequestBody PostagemDTO postagemDTO) {
 		Postagem post = postagemService.createPost(postagemDTO);
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/post/{id}")
-				.buildAndExpand(post.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/post/{id}").buildAndExpand(post.getId())
+				.toUri();
 		return ResponseEntity.created(uri).body(postagemDTO);
 
 	}

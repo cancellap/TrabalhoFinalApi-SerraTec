@@ -10,9 +10,8 @@ import com.serratec.redeSocial.domain.RelacionamentoPK;
 import com.serratec.redeSocial.domain.Usuario;
 
 @Repository
-public interface RelacionamentoRepository extends JpaRepository<Relacionamento, RelacionamentoPK>{
+public interface RelacionamentoRepository extends JpaRepository<Relacionamento, RelacionamentoPK> {
 
 	Optional<Usuario> findByRelacionamentoPK_Seguidor(Usuario seguidor);
-
 
 }

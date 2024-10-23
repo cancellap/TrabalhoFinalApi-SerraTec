@@ -2,7 +2,6 @@ package com.serratec.redeSocial.dto;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,7 +32,7 @@ public class UsuarioInserirDTO {
 
 	@NotBlank(message = "Senha do usuario deve ser preenchida")
 	private String senhaConfirma;
-//	@JsonFormat(pattern = "dd/MM/yyyy")
+
 	private LocalDate dataNascimento;
 
 	private String url;
@@ -42,7 +41,8 @@ public class UsuarioInserirDTO {
 
 	}
 
-	public UsuarioInserirDTO(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento ) {
+	public UsuarioInserirDTO(Long id, String nome, String sobrenome, String email, String senha,
+			LocalDate dataNascimento) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
