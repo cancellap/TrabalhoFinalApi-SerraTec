@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.serratec.redeSocial.domain.Comentario;
 
 @Repository
-public interface ComentarioRepository extends JpaRepository<Comentario, Long>{
-	
+public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
+
 	Optional<Comentario> findById(Long id);
 
 }

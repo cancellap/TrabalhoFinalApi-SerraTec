@@ -3,12 +3,10 @@ package com.serratec.redeSocial.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Comentario {
@@ -17,16 +15,20 @@ public class Comentario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 
-	@ManyToOne // Muitos comentários para uma postagem
+	@JsonBackReference
+	@ManyToOne
 	@JoinColumn(name = "postagem_id")
 	private Postagem postagem;
 
+	@NotBlank(message = "O campo texto não pode estar vazio")
 	private String texto;
 
+	@Column(name = "data_criacao")
 	private LocalDate dataCriacao;
 
 	public Long getId() {

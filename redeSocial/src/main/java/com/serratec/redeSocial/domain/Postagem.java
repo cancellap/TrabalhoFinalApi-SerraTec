@@ -20,13 +20,12 @@ public class Postagem {
 
 	private String conteudo;
 
+	@Column(name = "data_criacao")
 	private LocalDate dataCriacao;
 
 	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL)
 	private Set<Comentario> comentarios = new HashSet<>();
 
-	// Relação de muitos para um postagem e usuário. Não sei se precisaremos das
-	// anotações JsonBackReference e IgnoreJson
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")

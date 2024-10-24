@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.serratec.redeSocial.domain.Comentario;
 import com.serratec.redeSocial.dto.ComentarioDTO;
-import com.serratec.redeSocial.dto.UsuarioDTO;
 import com.serratec.redeSocial.service.ComentarioService;
 
 @RestController
@@ -26,11 +25,11 @@ public class ComentarioController {
 
 	@Autowired
 	private ComentarioService comentarioService;
-	
+
 	@GetMapping
 	public ResponseEntity<Page<ComentarioDTO>> listarPaginado(
-			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 5) 
-			Pageable pageable) {
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 40) Pageable pageable) {
+
 		Page<ComentarioDTO> comentarios = comentarioService.findAll(pageable);
 		return ResponseEntity.ok(comentarios);
 	}

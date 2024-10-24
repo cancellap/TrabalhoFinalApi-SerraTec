@@ -56,6 +56,4 @@ public class ComentarioDTO {
 		this.postagemId = postagemId;
 	}
 
-
-
 }
